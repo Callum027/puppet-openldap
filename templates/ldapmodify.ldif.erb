@@ -1,11 +1,15 @@
 dn: <%= @dn %>
 changetype: modify
+<% started = false -%>
 <% oldkey = '' -%>
 <% oldvalue = '' -%>
 <% @attrs.each do |hash| -%>
 <% hash.each_pair do |key, value| -%>
 <% if key != oldkey -%>
+<% if started = false -%>
+<% started = true -%>
 -
+<% end -%>
 replace: <%= key %>
 <% end -%>
 <%= key %>: <%= value %>

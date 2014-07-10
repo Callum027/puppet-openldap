@@ -85,10 +85,10 @@ class openldap::server
 			{ "olcRootPW"	=> $rootpw },
 
 			{ "olcAccess"	=> "{0}to attrs=userPassword,shadowLastChange by self write by anonymous auth by dn=\"$rootdn\" write by * none" },
-			{ "olcAccess"	=> "olcAccess: {1}to dn.base=\"\" by * read" },
+			{ "olcAccess"	=> "{1}to dn.base=\"\" by * read" },
 			# SUPER IMPORTANT. This olcAccess attribute is required for the openldap::server
 			# module to be able to modify records in the directory!
-			{ "olcAccess"	=> "olcAccess: {2}to * by self write by dn.exact=\"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth\" manage by dn=\"$rootdn\" write by * read" },
+			{ "olcAccess"	=> "{2}to * by self write by dn.exact=\"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth\" manage by dn=\"$rootdn\" write by * read" },
 		],
 	}
 }
