@@ -35,7 +35,7 @@ define openldap::server::ldapdelete($dn = $title)
 
 	exec
 	{ "$openldap::params::ldapdelete -Y EXTERNAL -H ldapi:/// ${dn}":
-		require	=> Service["slapd"],
+		require	=> Service[$openldap::params::server_service],
 		returns	=> [ 0, 32 ],
 	}
 }
