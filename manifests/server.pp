@@ -49,6 +49,9 @@ class openldap::server
 	$rootpw
 )
 {
+	# Make sure openldap::params is defined.
+	require openldap::params
+
 	# Install slapd.
 	package
 	{ $openldap::params::server_packages:

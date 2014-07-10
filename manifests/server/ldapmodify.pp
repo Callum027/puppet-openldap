@@ -39,12 +39,16 @@ define openldap::server::ldapmodify
 	$attrs
 )
 {
+	# Make sure openldap::params is defined.
 	require openldap::params
 
+ 	# Check if openldap::server is defined.
 	if (!defined(Class["openldap::server"]))
 	{
 		fail("class openldap::server not defined")
 	}
+
+	# Validate the input attributes.
 
 	openldap::server::validate_array_of_hashes
 	{ "ldapmodify-$title":
@@ -57,12 +61,11 @@ define openldap::server::ldapmodify
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
 		content	=> template("openldap/ldapmodify.ldif.erb"),
-		require	=> Service[$openldap::params::server_service],
 	}
 
 	exec
 	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapmodify-$title.ldif":
-		require	=> File["$openldap::params::tmpdir/ldapmodify-$title.ldif"],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapmodify-$title.ldif"] ],
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapmodify-$title.ldif": }
 }

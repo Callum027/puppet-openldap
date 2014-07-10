@@ -39,13 +39,16 @@ define openldap::server::ldapadd
 	$attrs
 )
 {
+	# Make sure openldap::params is defined.
 	require openldap::params
 
+ 	# Check if openldap::server is defined.
 	if (!defined(Class["openldap::server"]))
 	{
 		fail("class openldap::server not defined")
 	}
 
+	# Validate the input attributes.
 	openldap::server::validate_array_of_hashes
 	{ "ldapadd-$title":
 		array	=> $attrs,
@@ -58,7 +61,6 @@ define openldap::server::ldapadd
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
 		content	=> template("openldap/ldapadd.ldif.erb"),
-		require	=> Service[$openldap::params::server_service],
 	}
 
 	# Same for the ldapmodify call.
@@ -68,14 +70,13 @@ define openldap::server::ldapadd
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
 		content	=> template("openldap/ldapmodify.ldif.erb"),
-		require	=> Service[$openldap::params::server_service],
 	}
 
 	# Try the ldapmodify call, first of all. This should work if
 	# the given DN already exists in the database, and just needs to be updated.
 	exec
 	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif":
-		require	=> File["$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif"],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif"] ],
 		onlyif	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif": } ->
@@ -83,7 +84,7 @@ define openldap::server::ldapadd
 	# the database. This will be run when the DN is initially added to the database.
 	exec
 	{ "$openldap::params::ldapadd -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-$title.ldif":
-		require	=> File["$openldap::params::tmpdir/ldapadd-$title.ldif"],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapadd-$title.ldif"] ],
 		unless	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-$title.ldif": }

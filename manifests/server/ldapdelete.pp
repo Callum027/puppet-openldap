@@ -26,8 +26,10 @@
 #
 define openldap::server::ldapdelete($dn = $title)
 {
+	# Make sure openldap::params is defined.
 	require openldap::params
 
+ 	# Check if openldap::server is defined.
 	if (!defined(Class["openldap::server"]))
 	{
 		fail("class openldap::server not defined")
