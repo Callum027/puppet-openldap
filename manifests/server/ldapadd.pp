@@ -33,33 +33,6 @@
 #
 # Copyright 2014 Callum Dickinson.
 #
-define validate_array_of_hashes_helper($array, $count, $length)
-{
-	validate_hash($array[$count])
-
-	if ($count < ($length + 1))
-	{
-		validate_array_of_hashes_helper
-		{ "$array-$count-$length":
-			array	=> $array,
-			count	=> $count + 1,
-			length	=> $length,
-		}
-	}
-}
-
-define validate_array_of_hashes($array = $title)
-{
-	validate_array($array)
-
-	validate_array_of_hashes_helper
-	{ "$array":
-		array	=> $array,
-		count	=> 0,
-		length	=> size($array),
-	}
-}
-
 define openldap::server::ldapadd
 (
 	$dn	= $title,
@@ -73,7 +46,7 @@ define openldap::server::ldapadd
 		fail("class openldap::server not defined")
 	}
 
-	validate_array_of_hashes{ $attrs: }
+	openldap::server::validate_array_of_hashes{ $attrs: }
 
 	# Evaluate the template for the ldapadd call.
 	file
