@@ -4,14 +4,12 @@ changetype: modify
 <% oldvalue = '' -%>
 <% @attrs.each do |hash| -%>
 <% hash.each_pair do |key, value| -%>
-<% if key == oldkey -%>
-add: <%= key %>
-<% else -%>
+<% if key != oldkey -%>
+-
 replace: <%= key %>
 <% end -%>
 <%= key %>: <%= value %>
 <% oldkey = key -%>
 <% oldvalue = value -%>
--
 <% end -%>
 <% end -%>
