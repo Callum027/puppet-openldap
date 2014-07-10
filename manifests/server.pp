@@ -80,5 +80,4 @@ class openldap::server
 			{ "olcRootPW"	=> $rootpw },
 		],
 	}
-  }
 }
