@@ -1,0 +1,6 @@
+dn: <%= @dn %>
+<% @attrs.each do |hash| -%>
+<% hash.each_pair do |key, value| -%>
+<%= key %>: <%= value %>
+<% end -%>
+<% end -%>
