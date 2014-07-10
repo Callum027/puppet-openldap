@@ -26,10 +26,10 @@ define openldap::server::validate_array_of_hashes_helper($array, $count, $length
 {
 	if (!is_hash($array[$count]))
 	{
-		fail("Array $array, element $count (data: $array[$count]) is not a hash")
+		fail("Array $array, element $count is not a hash")
 	}
 
-	if ($count < ($length + 1))
+	if (($count + 1) < $length)
 	{
 		openldap::server::validate_array_of_hashes_helper
 		{ "$title-$count":
