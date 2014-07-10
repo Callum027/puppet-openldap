@@ -61,7 +61,7 @@ define openldap::server::ldapmodify
 
 	exec
 	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapmodify-$title.ldif":
-		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapmodify-$title.ldif"] ],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapmodify-$title.ldif"] ],
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapmodify-$title.ldif": }
 }

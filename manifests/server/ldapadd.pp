@@ -73,7 +73,7 @@ define openldap::server::ldapadd
 	# the given DN already exists in the database, and just needs to be updated.
 	exec
 	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif":
-		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif"] ],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif"] ],
 		onlyif	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif": } ->
@@ -81,7 +81,7 @@ define openldap::server::ldapadd
 	# the database. This will be run when the DN is initially added to the database.
 	exec
 	{ "$openldap::params::ldapadd -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-$title.ldif":
-		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapadd-$title.ldif"] ],
+		require	=> [ Service[$openldap::params::server_service], File["$openldap::params::tmpdir/ldapadd-$title.ldif"] ],
 		unless	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
 	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-$title.ldif": }
