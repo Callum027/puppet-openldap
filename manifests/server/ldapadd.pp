@@ -72,7 +72,7 @@ define openldap::server::ldapadd
 	# Try the ldapmodify call, first of all. This should work if
 	# the given DN already exists in the database, and just needs to be updated.
 	exec
-	{ "$}openldap::params::ldapmodify} -Y EXTERNAL -H ldapi:/// -f ${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif":
+	{ "${openldap::params::ldapmodify} -Y EXTERNAL -H ldapi:/// -f ${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif":
 		require	=> [ Service["slapd"], File["${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif"] ],
 		onlyif	=> "${openldap::params::ldapsearch} -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
