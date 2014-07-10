@@ -47,7 +47,7 @@ define openldap::server::ldapadd
 	}
 
 	openldap::server::validate_array_of_hashes
-	{ $title:
+	{ "ldapadd-$title":
 		array	=> $attrs,
 	}
 
