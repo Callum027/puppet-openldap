@@ -6,7 +6,7 @@ changetype: modify
 <% @attrs.each do |hash| -%>
 <% hash.each_pair do |key, value| -%>
 <% if key != oldkey -%>
-<% if started = false -%>
+<% if started == false -%>
 <% started = true -%>
 -
 <% end -%>
