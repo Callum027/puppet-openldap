@@ -74,13 +74,13 @@ class openldap::server
 	}
 
 	# Add some initial attributes to the cn=config entry.
-	openldap::server::ldapmodify
-	{ "openldap::server::ldapmodify::olcDatabase={1}hdb,cn=config":
-		dn	=> "olcDatabase={1}hdb,cn=config",
-		attrs	=>
-		[
-			{ "olcRootDN"	=> $rootdn },
-			{ "olcRootPW"	=> $rootpw },
-		],
-	}
+	#openldap::server::ldapmodify
+	#{ "openldap::server::ldapmodify::olcDatabase={1}hdb,cn=config":
+	#	dn	=> "olcDatabase={1}hdb,cn=config",
+	#	attrs	=>
+	#	[
+	#		{ "olcRootDN"	=> $rootdn },
+	#		{ "olcRootPW"	=> $rootpw },
+	#	],
+	#}
 }
