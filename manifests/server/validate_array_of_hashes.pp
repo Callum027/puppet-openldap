@@ -37,7 +37,7 @@ define openldap::server::validate_array_of_hashes_helper($array, $count, $length
 	}
 }
 
-define openldap::server::validate_array_of_hashes($array = $title)
+define openldap::server::validate_array_of_hashes($array)
 {
 	validate_array($array)
 
