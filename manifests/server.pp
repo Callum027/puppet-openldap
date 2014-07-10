@@ -74,13 +74,22 @@ class openldap::server
 	}
 
 	# Add some initial attributes to the cn=config entry.
-	#openldap::server::ldapmodify
-	#{ "openldap::server::ldapmodify::olcDatabase={1}hdb,cn=config":
-	#	dn	=> "olcDatabase={1}hdb,cn=config",
-	#	attrs	=>
-	#	[
-	#		{ "olcRootDN"	=> $rootdn },
-	#		{ "olcRootPW"	=> $rootpw },
-	#	],
-	#}
+	# The root DN and it's password, as well as the access control list
+	# attributes required for the module to work properly.
+	openldap::server::ldapmodify
+	{ "openldap::server::ldapmodify::olcDatabase={1}hdb,cn=config":
+		dn	=> "olcDatabase={1}hdb,cn=config",
+		attrs	=>
+		[
+			{ "olcRootDN"	=> $rootdn },
+			{ "olcRootPW"	=> $rootpw },
+
+			{ "olcAccess"	=> "{0}to attrs=userPassword,shadowLastChange by self write by anonymous auth by dn='$rootdn' write by * none" },
+			{ "olcAccess"	=> "olcAccess: {1}to dn.base='' by * read" },
+			{ "olcAccess"	=> "olcAccess: {2}to * by self write by dn='$rootdn' write by * read" },
+			# SUPER IMPORTANT. This olcAccess attribute is required for the openldap::server
+			# module to be able to modify records in the directory!
+			{ "olcAccess"	=> "olcAccess: {3}to * by dn='gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth' write" },
+		],
+	}
 }
