@@ -29,7 +29,7 @@ define openldap::server::validate_array_of_hashes_helper($array, $count, $length
 	if ($count < ($length + 1))
 	{
 		openldap::server::validate_array_of_hashes_helper
-		{ "$array-$count-$length":
+		{ "$title-$count":
 			array	=> $array,
 			count	=> $count + 1,
 			length	=> $length,
@@ -42,7 +42,7 @@ define openldap::server::validate_array_of_hashes($array)
 	validate_array($array)
 
 	openldap::server::validate_array_of_hashes_helper
-	{ "$array":
+	{ "$title":
 		array	=> $array,
 		count	=> 0,
 		length	=> size($array),
