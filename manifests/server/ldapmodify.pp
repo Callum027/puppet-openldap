@@ -52,7 +52,7 @@ define openldap::server::ldapmodify
 	}
 
 	file
-	{ "${openldap::params::tmpdir}/ldapmodify-$title.ldif":
+	{ "$openldap::params::tmpdir/ldapmodify-$title.ldif":
 		owner	=> $openldap::params::server_owner,
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
@@ -60,8 +60,8 @@ define openldap::server::ldapmodify
 	}
 
 	exec
-	{ "${openldap::params::ldapmodify} -Y EXTERNAL -H ldapi:/// -f ${openldap::params::tmpdir}/ldapmodify-$title.ldif":
-		require	=> [ Service["slapd"], File["${openldap::params::tmpdir}/ldapmodify-$title.ldif"] ],
+	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapmodify-$title.ldif":
+		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapmodify-$title.ldif"] ],
 	} ->
-	exec { "${openldap::params::rm} -f ${openldap::params::tmpdir}/ldapmodify-$title.ldif": }
+	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapmodify-$title.ldif": }
 }

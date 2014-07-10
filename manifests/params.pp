@@ -28,6 +28,7 @@ class openldap::params
 
 			# Executable locations
 			$ldapadd		= "/usr/bin/ldapadd"
+			$ldapsearch		= "/usr/bin/ldapsearch"
 			$ldapmodify		= "/usr/bin/ldapmodify"
 			$ldapdelete		= "/usr/bin/ldapdelete"
 			$ldapmodrdn		= "/usr/bin/ldapmodrdn"
