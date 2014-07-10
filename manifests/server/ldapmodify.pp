@@ -46,7 +46,10 @@ define openldap::server::ldapmodify
 		fail("class openldap::server not defined")
 	}
 
-	openldap::server::validate_array_of_hashes{ $attrs: }
+	openldap::server::validate_array_of_hashes
+	{ "ldapmodify-$title":
+		array	=> $attrs,
+	}
 
 	file
 	{ "$openldap::params::tmpdir/ldapmodify-$title.ldif":

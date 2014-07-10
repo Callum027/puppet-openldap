@@ -46,7 +46,10 @@ define openldap::server::ldapadd
 		fail("class openldap::server not defined")
 	}
 
-	openldap::server::validate_array_of_hashes{ $attrs: }
+	openldap::server::validate_array_of_hashes
+	{ $title:
+		array	=> $attrs,
+	}
 
 	# Evaluate the template for the ldapadd call.
 	file
