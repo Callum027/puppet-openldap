@@ -53,7 +53,7 @@ define openldap::server::ldapadd
 
 	# Evaluate the template for the ldapadd call.
 	file
-	{ "$openldap::params::tmpdir/ldapadd-$title.ldif":
+	{ "${openldap::params::tmpdir}/ldapadd-$title.ldif":
 		owner	=> $openldap::params::server_owner,
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
@@ -62,7 +62,7 @@ define openldap::server::ldapadd
 
 	# Same for the ldapmodify call.
 	file
-	{ "$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif":
+	{ "${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif":
 		owner	=> $openldap::params::server_owner,
 		group	=> $openldap::params::server_group,
 		mode	=> $openldap::params::server_mode,
@@ -72,17 +72,17 @@ define openldap::server::ldapadd
 	# Try the ldapmodify call, first of all. This should work if
 	# the given DN already exists in the database, and just needs to be updated.
 	exec
-	{ "$openldap::params::ldapmodify -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif":
-		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif"] ],
-		onlyif	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
+	{ "$}openldap::params::ldapmodify} -Y EXTERNAL -H ldapi:/// -f ${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif":
+		require	=> [ Service["slapd"], File["${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif"] ],
+		onlyif	=> "${openldap::params::ldapsearch} -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
-	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-ldapmodify-$title.ldif": } ->
+	exec { "${openldap::params::rm} -f ${openldap::params::tmpdir}/ldapadd-ldapmodify-$title.ldif": } ->
 	# Try the ldapadd next, and don't execute it if the given DN exists in
 	# the database. This will be run when the DN is initially added to the database.
 	exec
-	{ "$openldap::params::ldapadd -Y EXTERNAL -H ldapi:/// -f $openldap::params::tmpdir/ldapadd-$title.ldif":
-		require	=> [ Service["slapd"], File["$openldap::params::tmpdir/ldapadd-$title.ldif"] ],
-		unless	=> "$openldap::params::ldapsearch -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
+	{ "${openldap::params::ldapadd} -Y EXTERNAL -H ldapi:/// -f ${openldap::params::tmpdir}/ldapadd-$title.ldif":
+		require	=> [ Service["slapd"], File["${openldap::params::tmpdir}/ldapadd-$title.ldif"] ],
+		unless	=> "${openldap::params::ldapsearch} -Y EXTERNAL -H ldapi:/// -b \"$dn\"",
 	} ->
-	exec { "$openldap::params::rm -f $openldap::params::tmpdir/ldapadd-$title.ldif": }
+	exec { "${openldap::params::rm} -f ${openldap::params::tmpdir}/ldapadd-$title.ldif": }
 }
