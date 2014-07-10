@@ -46,7 +46,7 @@ class openldap::server
 (
 	$base,
 	$rootdn	= "cn=admin,$base",
-	$rootpw,
+	$rootpw
 )
 {
 	# Install slapd.
