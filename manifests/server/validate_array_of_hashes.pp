@@ -24,7 +24,10 @@
 #
 define openldap::server::validate_array_of_hashes_helper($array, $count, $length)
 {
-	validate_hash($array[$count])
+	if (!is_hash($array[$count]))
+	{
+		fail("Array $array, element $count (data: $array[$count]) is not a hash")
+	}
 
 	if ($count < ($length + 1))
 	{
