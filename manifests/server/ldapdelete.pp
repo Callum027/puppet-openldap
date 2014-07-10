@@ -1,43 +1,37 @@
-# == Class: openldap
+# == Type: openldap::server::ldapdelete
 #
-# Full description of class openldap here.
+# Delete existing LDAP entries from the directory.
 #
 # === Parameters
 #
 # Document parameters here.
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*dn*]
+#   Distinguished Name (DN) entry to modify. Default is resource title.
+#   Can take an array of strings, to remove multiple entries at once.
 #
 # === Variables
 #
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
-#
 # === Examples
 #
-#  class { openldap:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#  }
+#  openldap::server::ldapdelete { 'cn=exampleuser,dc=example,dc=com': }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Callum Dickinson <callum@huttradio.co.nz>
 #
 # === Copyright
 #
-# Copyright 2014 Your name here, unless otherwise noted.
+# Copyright 2014 Callum Dickinson.
 #
 define openldap::server::ldapdelete($dn = $title)
 {
 	require openldap::params
+
+	if (!defined(Class["openldap::server"]))
+	{
+		fail("class openldap::server not defined")
+	}
 
 	exec
 	{ "$openldap::params::ldapdelete -Y EXTERNAL -H ldapi:/// ${dn}":
